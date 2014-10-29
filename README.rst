@@ -1,7 +1,7 @@
-GOD: Python, Processes, and Prana
-=================================
+Pipes: Python, Processes, and... Pipes
+======================================
 
-Python's Subprocess module is well designed for lower functions. GOD is designed
+Python's Subprocess module is well designed for lower functions. Pipes is designed
 to encourage higher functions.
 
 
@@ -13,15 +13,16 @@ Ideas
 - Process monitoring
 - programatically compose a chain of streams.
 - process call timeouts
+- >>> uptime.std_out >> cowsay.std_in
 
 Usage
 -----
 
 Simple Usage::
 
-    >>> import god
+    >>> import pipes
 
-    >>> c = god.run('uptime')
+    >>> c = pipes.run('uptime')
     >>> c.exit_code
     0
     >>> c.ok
@@ -32,11 +33,10 @@ Simple Usage::
 
 Advanced Usage:
 
-    >>> chain = god.session()
+    >>> chain = pipes.chain()
     >>> uptime = chain.process('uptime')
     >>> cowsay = chain.process('cowsay')
     >>> chain.link(uptime.std_out, cowsay.std_in)
-    >>> # uptime.std_out >> cowsay.std_in
     <<< chain.start()
 
 
