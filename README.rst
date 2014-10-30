@@ -37,7 +37,8 @@ Advanced Usage:
     >>> uptime = chain.process('uptime')
     >>> cowsay = chain.process('cowsay')
     >>> chain.link(uptime.std_out, cowsay.std_in)
-    <<< chain.start()
+    >>> chain.start(wait=True)
+    >>> chain.wait()
 
 
     >>> from god import ProcessHandler
