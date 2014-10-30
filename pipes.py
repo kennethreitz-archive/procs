@@ -7,7 +7,8 @@ class Process(object):
     def __init__(self, command):
         self.command = command
         self.environ = {}
-        self.cwd =
+        self.cwd = None
+
 
     def set_command(self, command):
         # process popen chain, etc
