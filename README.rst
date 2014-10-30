@@ -31,7 +31,7 @@ Simple Usage::
     16:08  up  1:16, 7 users, load averages: 1.02 1.90 1.75
 
 
-Advanced Usage:
+Advanced Usage::
 
     >>> chain = pipes.chain()
     >>> uptime = chain.process('uptime')
@@ -41,7 +41,7 @@ Advanced Usage:
     >>> chain.wait()
 
 
-    >>> from god import ProcessHandler
+    >>> from pipes import ProcessHandler
 
     class MyCommmand(ProcessHandler):
 
