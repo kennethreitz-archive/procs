@@ -5,7 +5,21 @@ import subprocess
 
 class Process(object):
     def __init__(self, command):
-        pass
+        self.command = command
+        self.environ = {}
+        self.cwd =
+
+    def set_command(self, command):
+        # process popen chain, etc
+        self.command = command
+
+    def set_environ(self, environ, clean=False):
+        self.environ = dict() if clean else dict(os.environ)
+        self.environ.update(environ)
+
+    def set_cwd(self, cwd):
+        # expand, discover, etc.
+        self.cwd = cwd
 
     def start(self):
         pass
@@ -40,7 +54,12 @@ class Chain(object):
     def start(self, wait=False):
         for process in self.processes:
             process.start()
-            # wait=wait
+
+        self.wait()
+
+    def wait(self):
+        # wait, somehow
+        pass
 
 
 
@@ -49,5 +68,13 @@ def chain():
     return Chain()
 
 
-def process():
+def process(command, env=None, clean_env=False, cwd=None, wait=False):
+    p = Process(command)
+
+    if wait:
+        p.start()
+        p.wait()
+
+
+def run(command, env=None, cwd=None, clean_environ=False):
     pass
