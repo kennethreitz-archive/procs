@@ -5,10 +5,10 @@ chain = pipes.chain()
 uptime = chain.process('uptime')
 cowsay = chain.process('cowsay')
 
-chain.link(uptime.std_out, cowsay.std_in)
+chain.link(uptime.stdout, cowsay.stdin)
 chain.start(wait=True)
 
-print cowsay.std_out
+print cowsay.stdout
 
 
 # ConnectedProcess

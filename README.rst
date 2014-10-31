@@ -13,7 +13,7 @@ Ideas
 - Process monitoring
 - programatically compose a chain of streams.
 - process call timeouts
-- >>> uptime.std_out >> cowsay.std_in
+- >>> uptime.stdout >> cowsay.stdin
 
 Usage
 -----
@@ -23,11 +23,11 @@ Simple Usage::
     >>> import pipes
 
     >>> c = pipes.run('uptime')
-    >>> c.exit_code
+    >>> c.returncode
     0
     >>> c.ok
     True
-    >>> print c.std_out
+    >>> print c.stdout
     16:08  up  1:16, 7 users, load averages: 1.02 1.90 1.75
 
 
@@ -36,7 +36,7 @@ Advanced Usage::
     >>> chain = pipes.chain()
     >>> uptime = chain.process('uptime')
     >>> cowsay = chain.process('cowsay')
-    >>> chain.link(uptime.std_out, cowsay.std_in)
+    >>> chain.link(uptime.stdout, cowsay.stdin)
     >>> chain.start(wait=True)
     >>> chain.wait()
 
