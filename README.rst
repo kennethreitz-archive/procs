@@ -1,4 +1,4 @@
-Pipes: Python, Processes, and... Pipes
+Procs: Python, Processes, and... Pipes
 ======================================
 
 Python's Subprocess module is well designed for lower functions. Pipes is designed
@@ -20,9 +20,9 @@ Usage
 
 Simple Usage::
 
-    >>> import pipes
+    >>> import procs
 
-    >>> c = pipes.run('uptime')
+    >>> c = procs.run('uptime')
     >>> c.exit_code
     0
     >>> c.ok
@@ -33,7 +33,7 @@ Simple Usage::
 
 Advanced Usage:
 
-    >>> chain = pipes.chain()
+    >>> chain = procs.chain()
     >>> uptime = chain.process('uptime')
     >>> cowsay = chain.process('cowsay')
     >>> chain.link(uptime.std_out, cowsay.std_in)
@@ -41,7 +41,7 @@ Advanced Usage:
     >>> chain.wait()
 
 
-    >>> from god import ProcessHandler
+    >>> from procs import ProcessHandler
 
     class MyCommmand(ProcessHandler):
 
