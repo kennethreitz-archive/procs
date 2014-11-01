@@ -2,7 +2,6 @@ import os
 import subprocess
 
 
-
 class Process(object):
     def __init__(self, command):
         self.command = command
@@ -26,16 +25,16 @@ class Process(object):
         pass
 
     @property
-    def std_in(self):
-        return 'std_in'
+    def stdin(self):
+        return 'stdin'
 
     @property
-    def std_out(self):
-        return 'std_out'
+    def stdout(self):
+        return 'stdout'
 
     @property
-    def std_err(self):
-        return 'std_err'
+    def stderr(self):
+        return 'stderr'
 
 
 class Chain(object):
