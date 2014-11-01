@@ -1,6 +1,6 @@
-import pipes
+import procs
 
-chain = pipes.chain()
+chain = procs.chain()
 
 uptime = chain.process('uptime')
 cowsay = chain.process('cowsay')
