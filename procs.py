@@ -9,6 +9,7 @@ class Process(object):
         self.environ = {}
         self.cwd = None
         self._stdout = None
+        self._returncode = None
 
 
     def set_command(self, command):
@@ -39,7 +40,8 @@ class Process(object):
 
     @property
     def returncode(self):
-        return 0
+        if self._returncode is not None:
+            return self._returncode
 
     def run(self):
         self._subprocess = subprocess.Popen(
@@ -48,7 +50,7 @@ class Process(object):
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
         )
-        self._subprocess.wait()
+        self._returncode = self._subprocess.wait()
         self._stdout = self._subprocess.stdout.read().decode()
 
 
