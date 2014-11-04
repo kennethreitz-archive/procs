@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import subprocess
 
@@ -49,7 +50,7 @@ class Chain(object):
         return p
 
     def link(self, x, y):
-        print 'Linking {} to {}'.format(x, y)
+        print('Linking {} to {}'.format(x, y))
 
     def start(self, wait=False):
         for process in self.processes:
