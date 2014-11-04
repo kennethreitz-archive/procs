@@ -60,13 +60,14 @@ class Process(object):
         self._subprocess = subprocess.Popen(
             args=self.command,
             shell=True,
-            stdin=self._stdin if self.stdin else subprocess.PIPE,
-            stdout=self._sdout if self.stdout else subprocess.PIPE,
+            stdin=self._stdin if self._stdin else subprocess.PIPE,
+            stdout=self._stdout if self._stdout else subprocess.PIPE,
         )
 
     def wait(self):
         self._returncode = self._subprocess.wait()
-        self._stdout_text = self._subprocess.stdout.read().decode()
+        if self._subprocess.stdout is not None:
+            self._stdout_text = self._subprocess.stdout.read().decode()
 
 
     def run(self):
@@ -74,50 +75,38 @@ class Process(object):
         self.wait()
 
 
-
     def __or__(self, other):
         return Chain([self, other])
 
 
+
 class Chain(object):
 
-    def __init__(self, processes=None):
-        self.processes = processes if processes is not None else []
+    def __init__(self, processes):
+        self.processes = processes
 
-
-    def process(self, command):
-        p = Process(command)
-        self.processes.append(p)
-
-        return p
-
-    def link(self, x, y):
-        print('Linking {} to {}'.format(x, y))
-
-    def start(self, wait=False):
-        for process in self.processes:
-            process.start()
-
-        self.wait()
-
-    def wait(self):
-        # wait, somehow
-        pass
 
     def run(self):
         for proc, next_proc in zip(self.processes, self.processes[1:]):
             read, write = os.pipe()
             proc.set_stdout(write)
             next_proc.set_stdin(read)
-        for proc in reversed(self.processes):
-            print('starting', proc)
+        for proc in self.processes:
             proc.start()
-        self.processes[-1].wait()
+        for proc in self.processes:
+            proc.wait()
+            if proc._stdout is not None:
+                os.close(proc._stdout)
 
 
     @property
     def returncode(self):
         return self.processes[-1].returncode
+
+
+    @property
+    def stdout(self):
+        return self.processes[-1].stdout
 
 
 

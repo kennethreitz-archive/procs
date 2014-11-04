@@ -9,10 +9,10 @@ TEST_DIR = os.path.abspath(os.path.join(
 
 
 def test_chained_procs():
-    ls = Process('ls')
+    ls = Process('ls {test_dir}'.format(test_dir=TEST_DIR))
     grep = Process('grep 2')
     chain = ls | grep
     chain.run()
     assert chain.returncode == 0
-    assert chain.stdout == 'file2'
+    assert chain.stdout.strip() == 'file2'
 
