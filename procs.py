@@ -8,7 +8,9 @@ class Process(object):
         self.command = command
         self.environ = {}
         self.cwd = None
+        self._stdin = None
         self._stdout = None
+        self._stdout_text = None
         self._returncode = None
 
 
@@ -24,14 +26,21 @@ class Process(object):
         # expand, discover, etc.
         self.cwd = cwd
 
+
+    def set_stdin(self, stdin):
+        self._stdin = stdin
+
+    def set_stdout(self, stdout):
+        self._stdout = stdout
+
     @property
     def stdin(self):
         return 'stdin'
 
     @property
     def stdout(self):
-        if self._stdout is not None:
-            return self._stdout
+        if self._stdout_text is not None:
+            return self._stdout_text
 
     @property
     def stderr(self):
@@ -42,22 +51,39 @@ class Process(object):
         if self._returncode is not None:
             return self._returncode
 
-    def run(self):
+    @property
+    def subprocess(self):
+        if self._subprocess is not None:
+            return self._subprocess
+
+    def start(self):
         self._subprocess = subprocess.Popen(
             args=self.command,
             shell=True,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
+            stdin=self._stdin if self.stdin else subprocess.PIPE,
+            stdout=self._sdout if self.stdout else subprocess.PIPE,
         )
-        self._returncode = self._subprocess.wait()
-        self._stdout = self._subprocess.stdout.read().decode()
 
+    def wait(self):
+        self._returncode = self._subprocess.wait()
+        self._stdout_text = self._subprocess.stdout.read().decode()
+
+
+    def run(self):
+        self.start()
+        self.wait()
+
+
+
+    def __or__(self, other):
+        return Chain([self, other])
 
 
 class Chain(object):
 
-    def __init__(self):
-        self.processes = []
+    def __init__(self, processes=None):
+        self.processes = processes if processes is not None else []
+
 
     def process(self, command):
         p = Process(command)
@@ -78,6 +104,20 @@ class Chain(object):
         # wait, somehow
         pass
 
+    def run(self):
+        for proc, next_proc in zip(self.processes, self.processes[1:]):
+            read, write = os.pipe()
+            proc.set_stdout(write)
+            next_proc.set_stdin(read)
+        for proc in reversed(self.processes):
+            print('starting', proc)
+            proc.start()
+        self.processes[-1].wait()
+
+
+    @property
+    def returncode(self):
+        return self.processes[-1].returncode
 
 
 
