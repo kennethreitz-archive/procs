@@ -23,7 +23,7 @@ Simple Usage::
     >>> import procs
 
     >>> c = procs.run('uptime')
-    >>> c.exit_code
+    >>> c.returncode
     0
     >>> c.ok
     True
