@@ -30,9 +30,8 @@ class Process(object):
 
     @property
     def stdout(self):
-        if self._stdout:
+        if self._stdout is not None:
             return self._stdout
-        return 'stdout'
 
     @property
     def stderr(self):

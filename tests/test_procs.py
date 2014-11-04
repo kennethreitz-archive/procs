@@ -15,6 +15,12 @@ def test_single_proc():
     assert ls.stdout == u'file1\nfile2\nfile3\n'
 
 
+def test_empty_output():
+    cat = Process('cat /dev/null')
+    cat.run()
+    assert cat.stdout == u''
+
+
 def test_returncode():
     assert not os.path.exists('/bin/nosuchcommand')
 
