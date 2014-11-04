@@ -6,26 +6,10 @@ import subprocess
 class Process(object):
     def __init__(self, command):
         self.command = command
-        self.environ = {}
-        self.cwd = None
         self._stdin = None
         self._stdout = None
         self._stdout_text = None
         self._returncode = None
-
-
-    def set_command(self, command):
-        # process popen chain, etc
-        self.command = command
-
-    def set_environ(self, environ, clean=False):
-        self.environ = dict() if clean else dict(os.environ)
-        self.environ.update(environ)
-
-    def set_cwd(self, cwd):
-        # expand, discover, etc.
-        self.cwd = cwd
-
 
     def set_stdin(self, stdin):
         self._stdin = stdin
@@ -41,10 +25,6 @@ class Process(object):
     def stdout(self):
         if self._stdout_text is not None:
             return self._stdout_text
-
-    @property
-    def stderr(self):
-        return 'stderr'
 
     @property
     def returncode(self):
