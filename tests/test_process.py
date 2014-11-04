@@ -7,6 +7,10 @@ TEST_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'test_data'
 ))
 
+def tests_repr():
+    p = Process('foo')
+    assert repr(p) == '<Process: foo>'
+
 
 def test_single_proc():
     ls = Process('ls {test_dir}'.format(test_dir=TEST_DIR))
