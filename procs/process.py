@@ -33,6 +33,11 @@ class Process(object):
             return self._returncode
 
     @property
+    def ok(self):
+        if self._returncode is not None:
+            return self.returncode is 0
+
+    @property
     def subprocess(self):
         if self._subprocess is not None:
             return self._subprocess

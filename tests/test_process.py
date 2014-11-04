@@ -32,3 +32,15 @@ def test_returncode():
     p.run()
     assert p.returncode == 127
 
+
+def test_ok_if_returncode_0():
+    p = Process('ls')
+    p.run()
+    assert p.ok is True
+
+
+def test_not_ok_if_returncode_not_0():
+    assert not os.path.exists('/bin/nosuchcommand')
+    p = Process('/bin/nosuchcommand')
+    p.run()
+    assert p.ok is False
