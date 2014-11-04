@@ -8,6 +8,7 @@ class Process(object):
         self.command = command
         self.environ = {}
         self.cwd = None
+        self._stdout = None
 
 
     def set_command(self, command):
@@ -22,20 +23,34 @@ class Process(object):
         # expand, discover, etc.
         self.cwd = cwd
 
-    def start(self):
-        pass
-
     @property
     def stdin(self):
         return 'stdin'
 
     @property
     def stdout(self):
+        if self._stdout:
+            return self._stdout
         return 'stdout'
 
     @property
     def stderr(self):
         return 'stderr'
+
+    @property
+    def returncode(self):
+        return 0
+
+    def run(self):
+        self._subprocess = subprocess.Popen(
+            args=self.command,
+            shell=True,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )
+        self._subprocess.wait()
+        self._stdout = self._subprocess.stdout.read().decode()
+
 
 
 class Chain(object):
