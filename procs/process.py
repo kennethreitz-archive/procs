@@ -1,9 +1,10 @@
 from __future__ import print_function
-import os
 import subprocess
+from .chain import Chain
 
 
 class Process(object):
+
     def __init__(self, command):
         self.command = command
         self._stdin = None
@@ -62,48 +63,3 @@ class Process(object):
     def __repr__(self):
         return '<Process: {command}>'.format(command=self.command)
 
-
-class Chain(object):
-
-    def __init__(self, processes):
-        self.processes = processes
-
-
-    def run(self):
-        for proc, next_proc in zip(self.processes, self.processes[1:]):
-            read, write = os.pipe()
-            proc.set_stdout(write)
-            next_proc.set_stdin(read)
-        for proc in self.processes:
-            proc.start()
-        for proc in self.processes:
-            proc.wait()
-            if proc._stdout is not None:
-                os.close(proc._stdout)
-
-
-    @property
-    def returncode(self):
-        return self.processes[-1].returncode
-
-
-    @property
-    def stdout(self):
-        return self.processes[-1].stdout
-
-
-
-def chain():
-    return Chain()
-
-
-def process(command, env=None, clean_env=False, cwd=None, wait=False):
-    p = Process(command)
-
-    if wait:
-        p.start()
-        p.wait()
-
-
-def run(command, env=None, cwd=None, clean_environ=False):
-    pass
