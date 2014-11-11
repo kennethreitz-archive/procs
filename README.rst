@@ -13,7 +13,6 @@ Ideas
 - Process monitoring
 - programatically compose a chain of streams.
 - process call timeouts
-- >>> uptime.stdout >> cowsay.stdin
 
 Usage
 -----
@@ -23,7 +22,7 @@ Simple Usage::
     >>> import procs
 
     >>> c = procs.run('uptime')
-    >>> c.exit_code
+    >>> c.returncode
     0
     >>> c.ok
     True
@@ -33,13 +32,14 @@ Simple Usage::
 
 Advanced Usage::
 
-    >>> chain = procs.chain()
-    >>> uptime = chain.process('uptime')
-    >>> cowsay = chain.process('cowsay')
-    >>> chain.link(uptime.stdout, cowsay.stdin)
-    >>> chain.start(wait=True)
-    >>> chain.wait()
-
+    >>> ls = procs.Process('ls /usr/bin')
+    >>> grep = procs.Process('grep python')
+    >>> chain = ls | grep
+    >>> chain.run()
+    >>> print(chain.stdout)
+    python
+    python3
+    python3.4
 
     >>> from procs import ProcessHandler
 
