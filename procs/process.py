@@ -47,12 +47,12 @@ class Process(object):
             args=self.command,
             shell=True,
             stdin=self._stdin if self._stdin else subprocess.PIPE,
-            stdout=self._stdout if self._stdout else subprocess.PIPE,
+            stdout=subprocess.PIPE,
         )
 
-    def wait(self):
+    def wait(self, unread=False):
         self._returncode = self._subprocess.wait()
-        if self._subprocess.stdout is not None:
+        if self._subprocess.stdout is not None and not unread:
             self._stdout_text = self._subprocess.stdout.read().decode()
 
 

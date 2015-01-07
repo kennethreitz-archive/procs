@@ -16,3 +16,12 @@ def test_chained_procs():
     assert chain.returncode == 0
     assert chain.stdout.strip() == 'file2'
 
+def test_multi_chained_procs():
+    ls = Process('ls {test_dir}'.format(test_dir=TEST_DIR))
+    grep = Process('grep 2')
+    wc = Process('wc -c')
+    chain = ls | grep | wc
+    chain.run()
+    assert chain.returncode == 0
+    assert chain.stdout.strip() == '6'
+

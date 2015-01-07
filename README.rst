@@ -34,12 +34,11 @@ Advanced Usage::
 
     >>> ls = procs.Process('ls /usr/bin')
     >>> grep = procs.Process('grep python')
-    >>> chain = ls | grep
+    >>> wc = procs.Process('wc -l')
+    >>> chain = ls | grep | wc
     >>> chain.run()
     >>> print(chain.stdout)
-    python
-    python3
-    python3.4
+    19
 
     >>> from procs import ProcessHandler
 
